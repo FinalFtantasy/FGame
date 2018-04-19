@@ -1,0 +1,21 @@
+// 所有上报协议, 以req开头
+import "common.proto";
+
+message up_msg {
+	required uint32 						uid 						= 1;
+	optional req_battle					req_battle 			= 2; 	
+}
+
+message req_battle {
+	optional req_msg 						start_match 		= 1;
+	optional req_msg 						end_match 			= 2;
+	optional req_battle_operate	battle_operate 	= 3;
+}
+
+//	空结构体
+message req_msg {}
+
+message req_battle_operate {
+	required uint32 		room_id 		= 1;
+	optional battle 		battle 			= 2;
+}

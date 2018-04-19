@@ -1,0 +1,38 @@
+// 所有下行协议, 以reply开头
+import "common.proto";
+
+enum t_battle_result {
+	victory = 1;
+	defeat  = 2;
+	draw 		= 3;
+}
+
+message down_msg {
+	required uint32 						reply_seq				= 1 [default = 0];	//	消息序列号
+	required uint32  						reply_svr_ts 		= 2 [default = 0]; 	// 	服务器时间戳
+	optional reply_battle 			reply_battle 		= 3;
+}
+
+message reply_battle {
+	optional reply_start_match 	reply_start_match		= 1;
+	optional reply_end_match 		reply_end_match 		=	2;
+	optional reply_battle 			reply_battle 				= 3;
+}
+
+message reply_start_match {
+	required t_result 					result 					= 1;
+	required uint32 						room_id					= 2;
+	repeated user 							opp_users				= 3;
+	optional uint32 						battle_start_ts = 4;	//	战斗开始时间戳
+	repeated event_info 				event_infos 		= 5; 	// 	事件序列
+}
+
+message reply_end_match {
+	required t_result 					result 					= 1 [default = success];
+}
+
+message reply_battle {
+	optional t_battle_result 		battle_result 	= 1;	//	返回战斗结果时表明该场比赛已结束
+	optional battle 						battle 					= 2;
+	map<uint32, score> 					scores 					=	3;
+}

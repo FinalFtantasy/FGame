@@ -1,0 +1,66 @@
+// 	up和down共用协议
+
+//	枚举类型以 t_ 前缀
+enum t_result {
+	success = 1;
+	fail    = 2;
+}
+
+enum t_attack {
+  normal 	= 1;
+}
+
+enum t_event {
+	teacher_catched	=	1;
+}
+
+//	参数类型
+enum t_attack_attr {
+	crit 		=	1;
+}
+
+enum t_event_attr {
+}
+
+enum t_score_attr {
+}
+
+message user {
+	required uint32 		uid 			= 1;
+}
+
+message battle {
+	optional attack 		attack 		= 1;
+	optional event 			event 		=	2; 		
+}
+
+message attack {
+	required t_attack 	type 					= 1 [default = normal];
+	required uint32 		from_uid			= 2;
+	required uint32 		to_uid 				= 3;
+	required uint32 		times   			= 4 [default = 1];
+	map<t_attack_attr, uint32> attrs  = 5;
+}
+
+message event {
+	required t_event 		type   				= 1 [default = teacher_catched];
+	repeated uint32 		affected_uids = 2;
+	required uint32 		times 				= 3 [default = 0];
+	map<t_event_attr, uint32> attrs 	=	4;
+}
+
+//	比赛开始时预生成的对战时间信息
+message event_info {
+	required t_t_event 					type 						= 1;
+	required uint32 						start_time 			= 2; 	//	相对战斗开始的时间
+	required uint32 						duration 				= 3 [default = 0]; 	// 	持续时间
+	map<t_event_attr, uint32> 	attrs 					= 4;
+}
+
+message score {
+	required uint32 						uid 						= 1;
+	required uint32 						total_score 		= 2 [default = 0];
+	required uint32 						attack_score 		= 3 [default = 0];
+	required uint32 						event_score 		= 4 [default = 0];
+	map<t_score_attr, uint32>   attrs 					= 5;
+}
