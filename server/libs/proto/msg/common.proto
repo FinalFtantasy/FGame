@@ -20,9 +20,11 @@ enum t_attack_attr {
 }
 
 enum t_event_attr {
+	crit 		= 1;
 }
 
 enum t_score_attr {
+	buff 		= 1;
 }
 
 message user {
@@ -35,32 +37,47 @@ message battle {
 }
 
 message attack {
-	required t_attack 	type 					= 1 [default = normal];
-	required uint32 		from_uid			= 2;
-	required uint32 		to_uid 				= 3;
-	required uint32 		times   			= 4 [default = 1];
-	map<t_attack_attr, uint32> attrs  = 5;
+	required t_attack 		type 					= 1 [default = normal];
+	required uint32 			from_uid			= 2;
+	required uint32 			to_uid 				= 3;
+	required uint32 			times   			= 4 [default = 1];
+	optional attack_attr 	attrs 				=	5;
+}
+
+message attack_attr {
+	required t_attack_attr 	type 			= 1;
+	optional uint32 				value 		= 2;
 }
 
 message event {
-	required t_event 		type   				= 1 [default = teacher_catched];
-	repeated uint32 		affected_uids = 2;
-	required uint32 		times 				= 3 [default = 0];
-	map<t_event_attr, uint32> attrs 	=	4;
+	required t_event 			type   				= 1 [default = teacher_catched];
+	repeated uint32 			affected_uids = 2;
+	required uint32 			times 				= 3 [default = 0];
+	optional event_attr 	attrs 	=	4;
+}
+
+message event_attr {
+	required t_event_attr 	type 			= 1;
+	optional uint32 				value 		= 2;
 }
 
 //	比赛开始时预生成的对战时间信息
 message event_info {
-	required t_t_event 					type 						= 1;
-	required uint32 						start_time 			= 2; 	//	相对战斗开始的时间
-	required uint32 						duration 				= 3 [default = 0]; 	// 	持续时间
-	map<t_event_attr, uint32> 	attrs 					= 4;
+	required t_event 			type 					= 1;
+	required uint32 			start_time 		= 2; 	//	相对战斗开始的时间
+	required uint32 			duration 			= 3 [default = 0]; 	// 	持续时间
+	optional event_attr  	attrs 				= 4;
 }
 
 message score {
-	required uint32 						uid 						= 1;
-	required uint32 						total_score 		= 2 [default = 0];
-	required uint32 						attack_score 		= 3 [default = 0];
-	required uint32 						event_score 		= 4 [default = 0];
-	map<t_score_attr, uint32>   attrs 					= 5;
+	required uint32 				uid 						= 1;
+	required uint32 				total_score 		= 2 [default = 0];
+	required uint32 				attack_score 		= 3 [default = 0];
+	required uint32 				event_score 		= 4 [default = 0];
+	optional score_attr   	attrs 					= 5;
+}
+
+message score_attr {
+	required t_score_attr 	type 			= 1;
+	optional uint32 				value 		= 2;
 }
