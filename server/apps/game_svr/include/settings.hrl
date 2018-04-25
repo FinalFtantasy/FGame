@@ -9,8 +9,8 @@
 % ==========================================
 -define(DEBUG(Fmt, Args),    io:format(Fmt ++ "~n", Args)).
 -define(INFO(Fmt, Args),     io:format(Fmt ++ "~n", Args)).
--define(DEBUG(Arg),          io:format("~n",   [Arg])).
--define(INFO(Arg),           io:format("~n",   [Arg])).
+-define(DEBUG(Arg),          io:format(Arg ++ "~n")).
+-define(INFO(Arg),           io:format(Arg ++ "~n")).
 
 % ==========================================
 -define(ROOM_ETS, room_ets).

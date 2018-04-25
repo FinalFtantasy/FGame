@@ -28,8 +28,11 @@ start_link() ->
 
 %% Child :: {Id,StartFunc,Restart,Shutdown,Type,Modules}
 init([]) ->
-    {ok, { {one_for_all, 0, 1}, []} }.
+	ChildSpecs = child_specs(),
+    {ok, { {one_for_one, 10, 30}, ChildSpecs} }.
 
 %%====================================================================
 %% Internal functions
 %%====================================================================
+child_specs() -> 
+  [].

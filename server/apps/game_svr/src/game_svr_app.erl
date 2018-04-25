@@ -7,6 +7,7 @@
 
 -behaviour(application).
 
+-include("settings.hrl").
 %% Application callbacks
 -export([start/2, stop/1]).
 
@@ -15,7 +16,17 @@
 %%====================================================================
 
 start(_StartType, _StartArgs) ->
-    game_svr_sup:start_link().
+	Port 	= tools:svr_port(),
+  Dispatch = cowboy_router:compile([
+    {'_', [
+      {"/", game_handler, []}
+    ]}
+  ]),
+  {ok, _Pid} = cowboy:start_clear(http, [{port, Port}], #{
+    env => #{dispatch => Dispatch}
+  }),
+  ?INFO("game svr is started"),
+  woodman_sup:start_link().
 
 %%--------------------------------------------------------------------
 stop(_State) ->
