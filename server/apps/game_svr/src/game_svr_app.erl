@@ -26,7 +26,7 @@ start(_StartType, _StartArgs) ->
     env => #{dispatch => Dispatch}
   }),
   ?INFO("game svr is started"),
-  woodman_sup:start_link().
+  game_svr_sup:start_link().
 
 %%--------------------------------------------------------------------
 stop(_State) ->

@@ -1,11 +1,11 @@
 {application, proto,
- [{description, "An OTP application"},
+ [{description, "An OTP library"},
   {vsn, "0.1.0"},
   {registered, []},
-  {mod, { proto_app, []}},
   {applications,
    [kernel,
-    stdlib
+    stdlib,
+    rebar3_gpb_plugin
    ]},
   {env,[]},
   {modules, []},

@@ -3,7 +3,14 @@ import "common.proto";
 
 message up_msg {
 	required uint32 						uid 						= 1;
-	optional req_battle					req_battle 			= 2; 	
+	required uint32           	seq             = 2 [default = 0];  // 上报的消息标志位 服务器返回
+	optional uint32 						repeat 					= 3;								// 重复消息标识
+	optional req_heartbeat 			req_heartbeat 	= 4;
+	optional req_battle					req_battle 			= 5; 	
+}
+
+message req_heartbeat {
+  optional uint32    	time        = 1; // 心跳发送时间
 }
 
 message req_battle {
