@@ -1,0 +1,1 @@
+-record(usocket, {uid, pid, last_hb_time, up_msg, down_msg}).

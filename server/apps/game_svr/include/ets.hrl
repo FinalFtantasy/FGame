@@ -1,0 +1,2 @@
+-define(USER_ETS,   			user_ets).
+-define(USOCKET_ETS, 			usocket_ets).

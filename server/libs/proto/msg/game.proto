@@ -1,0 +1,7 @@
+//	只存在服务器的结构体
+//	import "common.proto";
+
+message user {
+	required uint32 		uid 			= 1;
+	required string 		password 	= 2 [default = "00000000"];
+}

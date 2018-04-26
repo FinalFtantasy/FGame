@@ -1,0 +1,25 @@
+#!/usr/bin/env escript
+
+main(_) ->
+  LibPath = "_build/default/lib/",
+ 
+  {ok, LibNames} = file:list_dir(LibPath),
+
+  lists:foldl(fun(LibName, _Acc) ->
+    %io:format("~p", [LibName]),
+    case filelib:is_dir(LibPath ++ LibName) of
+      true ->
+       {ok, BinNames} = file:list_dir(LibPath ++ LibName ++ "/ebin"),
+        %io:format("~p", [BinNames]),
+        lists:foldl(fun(BinName, _Acc1) ->
+            case string:split(BinName, ".") of
+              [Mod, "beam"] -> 
+                catch code:load_file(list_to_atom(Mod));
+              _ ->pass
+            end
+        end, [], BinNames);
+      false -> 
+        %io:format("false ~p~n", [LibName]),
+        pass
+    end
+  end, [], LibNames).

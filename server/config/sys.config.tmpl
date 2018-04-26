@@ -1,0 +1,129 @@
+#---------------------------- config tmpl-------------------------------
+LagerCfg="
+  {lager, [
+    {log_root, \"log\"},
+    {handlers, [
+      {lager_console_backend, [{level, debug}]},
+      {lager_file_backend, [{file, \"error.log\"}, {level, error}, {count, 10}, {size, 10240000}]},
+      {lager_file_backend, [{file, \"info.log\"}, {level, info}, {count, 10}, {size, 10240000}]}
+    ]},
+    {extra_sinks,
+      [{oss_lager_event,
+        [
+          {handlers, 
+            [{lager_file_backend, 
+              [
+                {file, \"oss/oss_log.log\"},
+                {level, info},
+                {count, 10},
+                {size, 10240000},
+                {formatter_config, [message, \"\\\n\"]},
+                {date, \"\$S300\"}
+              ]
+            }]
+          },
+          {async_threshold, 500},
+          {async_threshold_window, 50}
+        ]
+      }]
+    },
+    {crash_log, \"crash.log\"},
+    {crash_log_size, 10240000},
+    {crash_log_count, 10},
+    {error_logger_hwm, 100},
+    {colored, true}
+  ]}"
+RedisCfg="
+  {redis,
+    [{global_or_local, local},
+     {pools,
+       [{redis_pool,
+         [{size, 50},{max_overflow, 1000}],
+         [{host, \"${REDIS_HOST}\"}, {port, ${REDIS_PORT}}, {database, ${REDIS_DB}}]
+         }
+       ]}
+  ]}"
+GameCfg="
+  {game_svr, [
+    {svr_id,  \"${SERVER_ID}\"},
+    {gs_port, \"${GAME_SERVER_PORT}\"},
+    {im_server_key, \"${IM_SERVER_KEY}\"},
+    {battle_check_pools, [
+      {battle_check_pool, 
+        [{size, 10}, {max_overflow, 20}],
+        [{ip, \"$BATTLE_CHECK_IP\"}, {port, 8888}]
+      }
+    ]}
+  ]}"
+CenterCfg="
+  {center_svr, [
+    {center_node, 'center_svr_${CENTER_SERVER_ID}@${CENTER_SERVER_IP}'},
+    {cli_reg_type, \$SVR_REG_TYPE},
+    {cli_reg_name, \$SERVER_NAME},
+    {cli_reg_id, ${SERVER_ID}}
+  ]}"
+CacheMgrCfg="
+  {cache_mgr, [
+    {cache_cli_opts, [{game_svr_cache, 'cache_mgr_${CACHE_MGR_ID}@${CACHE_MGR_IP}'}]}
+  ]}"
+CacheWorkerCfg="
+  {cache_worker, [
+    {cache_mgr_node, 'cache_mgr_${CACHE_MGR_ID}@${CACHE_MGR_IP}'},
+    {cache_node_id, \"${SERVER_ID}\"}
+  ]}"
+DBCfg="
+  {db_svr, [
+    {db_id,   1},
+    {db_name, \"hgame_game_db_${SERVER_ID}\"},
+    {db_host, \"${DB_HOST}\"},
+    {db_port, ${DB_PORT}},
+    {db_user, \"${DB_USER}\"},
+    {db_psw,  \"${DB_PSW}\"}
+  ]}"
+ChatSvrCfg="
+  {chat_svr, [
+    {cs_port, ${CHAT_SERVER_PORT}},
+    {im_address, \"47.52.68.141:9141\"},
+    {access_type, 4},
+    {svr_name, \"world\"}
+  ]}"
+GMTCfg="
+  {gmt_svr, [
+    {gmt_port, ${GMT_SERVER_PORT}}
+  ]}"
+EHttpcConfig="
+  {ehttpc, [
+    {pools,
+      [{solr_pool, 
+        [{size, 10}, {max_overflow, 100}],
+        [{address, \"192.168.5.5:8983/solr\"}, {max_sessions, 2}, {max_keep_alive_length, 5}]
+        }
+      ]}
+  ]}"
+#---------------------------- center_svr config-------------------------------
+center_svr_cfgs=[$LagerCfg].
+center_svr_reg_type=by_name
+#---------------------------- game_svr config  -------------------------------
+game_svr_cfgs=[$LagerCfg,$GameCfg,$RedisCfg,$CenterCfg,$CacheMgrCfg,$EHttpcConfig].
+game_svr_reg_type=by_id
+#---------------------------- cache_mgr config -------------------------------
+cache_mgr_cfgs=[$LagerCfg,$CenterCfg].
+cache_mgr_reg_type=by_name
+#---------------------------- cahce_worker config-----------------------------
+cache_worker_cfgs=[$LagerCfg,$CenterCfg,$CacheWorkerCfg].
+cache_worker_reg_type=by_name
+#---------------------------- db_svr config    -------------------------------
+db_svr_cfgs=[$DBCfg,$CenterCfg].
+db_svr_reg_type=by_id
+#---------------------------- cdkey_svr config -------------------------------
+cdkey_svr_cfgs=[$LagerCfg,$CenterCfg].
+cdkey_svr_reg_type=by_name
+#---------------------------- chat_svr config  -------------------------------
+chat_svr_cfgs=[$LagerCfg,$ChatSvrCfg,$CenterCfg,$CacheMgrCfg,$RedisCfg].
+chat_svr_reg_type=by_name
+#---------------------------- gmt_svr config   -------------------------------
+gmt_svr_cfgs=[$LagerCfg,$GMTCfg,$GameCfg].
+gmt_svr_reg_type=by_name
+#---------------------------- online_svr config-------------------------------
+online_svr_cfgs=[$LagerCfg,$CenterCfg].
+online_svr_reg_type=by_name
