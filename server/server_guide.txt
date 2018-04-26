@@ -1,0 +1,23 @@
+服务器规范说明
+
+1. 	csv的表名和列名应该遵守驼峰命名法（一般无下划线，部分原先存在的表会有下划线），转成的record名字和字段名是由下划线连接的atom。
+	Eg：HeroLevel.csv -> csv_hero_level
+			CostAmount 		-> cost_amount
+			Cost_Amount   -> cost_amount
+	特定的常用缩写，ID、UI、CD、GS、PVP、PVE、TID等在转换时不会在缩写字母之间添加下划线。
+	Eg：HeroID 	->	hero_id
+			IsPVP   ->  is_pvp
+	对特殊字符，+、%、括号等转换为相关的单词或不转换。
+	Eg：+hp 			->	add_hp
+			%exp 			-> 	per_exp
+			action(s)	-> 	action
+
+2.	由csv转出的erl文件有以下导出方法：
+	1)	get(Key) 	->	{ok, Value} | Err 	若返回Err则同时打印该Err
+	2) 	get(Key, nowarn)	->	{ok, Value} | Err 	不打印Err
+	3) 	get_field(Key, FieldName) ->	{ok, FieldValue} | Err 	不打印Err
+	4)  get_all_keys/0 及 get_$index_keys/1, get_all_$index/0 一看就了解了对吧
+
+3.	mod中的get/1方法统一要求返回 {ok, Value} | Err ，get_$mod/1 方法返回 Value | Err。
+	Eg：users:get/1				->	{ok, User} | Err
+			users:get_user/1  ->	User | Err
